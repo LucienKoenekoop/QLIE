@@ -335,7 +335,11 @@ class Run(object):
                                                       file_base)
                             
                         outfile.write(outline)
-                        outfile.write('convergence=$(python $check -L $workdir)\n')
+                        outfile.write('convergence=$(python $check -L $workdir -r $run)\n')
+                        outfile.write('echo $convergence\n')
+                        outfile.write('if [ $convergence -eq 1 ]; then\n')
+                        outfile.write('    break\n')
+                        outfile.write('fi\n')
 
     def write_submitfile(self):
         IO.write_submitfile(self.directory, self.replacements)                        

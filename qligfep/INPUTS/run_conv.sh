@@ -25,8 +25,6 @@ check=/home/koenekoop/software/qligfep/stopLIE.py
 length=${#fepfiles[@]}
 length=$((length-1))
 for index in $(seq 0 $length);do
-convergence=0
-while [ $convergence -eq 0 ];do
 fepfile=${fepfiles[$index]}
 fepdir=$workdir/FEP$((index+1))
 mkdir -p $fepdir
@@ -41,10 +39,7 @@ cd $rundir
 
 cp $inputfiles/md*.inp .
 cp $inputfiles/*.top .
-cp $inputfiles/qfep.inp .
 cp $inputfiles/$fepfile .
-cp $inputfiles/run_0500-1000.sh .
-cp $inputfiles/run_0500-0000.sh .
 
 if [ $index -lt 1 ]; then
 cp $inputfiles/eq*.inp .
@@ -56,11 +51,11 @@ fi
 
 sed -i s/T_VAR/"$temperature"/ *.inp
 sed -i s/FEP_VAR/"$fepfile"/ *.inp
+echo $run
 if [ $index -lt 1 ]; then
 #time mpirun -np 16 $qdyn eq1.inp > eq1.log
 #EQ_FILES
 fi
 #RUN_FILES
 timeout 30s QFEP < qfep.inp > qfep.out
-done
 done
