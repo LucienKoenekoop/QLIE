@@ -5,7 +5,6 @@ import os
 
 import functions as f
 import settings as s
-import beta as b
 import IO
 
 class Run(object):
@@ -15,14 +14,6 @@ class Run(object):
         self.LIEdir = LIEdir
         self.FEP = LIEdir.strip('/')
         self.cluster='CSB'
-        self.vdw    = []
-        self.el     = []
-        self.fl_vdw = []
-        self.fl_el  = []
-        self.a      = 0.18
-        self.b0     = 0.33
-        self.beta   = 0
-        self.g      = 0
         self.path   = os.getcwd()
         
         
@@ -93,7 +84,6 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     run = Run(LIEdir = args.LIEdir)
-#    run.get_beta()
 #    run.read_LIE()
 #    run.calc_LIE()
     run.create_environment()
