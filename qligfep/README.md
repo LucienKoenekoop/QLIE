@@ -35,7 +35,7 @@ https://github.com/esguerra/Q6
 
 - Clone this repository:  
 
-    git clone https://github.com/lucienkoenekoop/QLIE/qligfep
+    git clone https://github.com/LucienKoenekoop/QLIE
 
 
 In settings.py:  
