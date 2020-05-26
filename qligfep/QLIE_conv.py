@@ -280,17 +280,17 @@ class Run(object):
                     
     def write_MD(self):
         self.replacements['FILE_N'] = 'eq5'
-        src = s.INPUT_DIR + '/md_LIE_XX.inp'
+        src = s.INPUT_DIR + '/md_LIE_XXX.inp'
         for i in range(1, 21):
-            tgt = self.directory + '/inputfiles/md_LIE_{:02d}.inp'.format(i)
-            self.replacements['FILE'] = 'md_LIE_{:02d}'.format(i)
+            tgt = self.directory + '/inputfiles/md_LIE_{:03d}.inp'.format(i)
+            self.replacements['FILE'] = 'md_LIE_{:03d}'.format(i)
             
             with open(src) as infile, open(tgt, 'w') as outfile:
                 for line in infile:
                     outline = IO.replace(line, self.replacements)
                     outfile.write(outline)                
         
-            self.replacements['FILE_N'] = 'md_LIE_{:02d}'.format(i)
+            self.replacements['FILE_N'] = 'md_LIE_{:03d}'.format(i)
         
     def write_runfile(self):
         ntasks = getattr(s, self.cluster)['NTASKS']
@@ -326,7 +326,7 @@ class Run(object):
                         outfile.write(outline)
                         
                 if line.strip() == '#RUN_FILES':
-                    for line in MD_files:
+                    for i,line in enumerate(MD_files):
                         file_base = line.split('/')[-1][:-4]
                             
                         outline = 'time mpirun -np {} $qdyn {}.inp'  \
@@ -335,11 +335,12 @@ class Run(object):
                                                       file_base)
                             
                         outfile.write(outline)
-                        outfile.write('convergence=$(python $check -L $workdir -r $run)\n')
-                        outfile.write('echo $convergence\n')
-                        outfile.write('if [ $convergence -eq 1 ]; then\n')
-                        outfile.write('    break\n')
-                        outfile.write('fi\n')
+                        if i > 8:
+                            outfile.write('convergence=$(python $check -L $workdir -r $run)\n')
+                            outfile.write('echo $convergence\n')
+                            outfile.write('if [ $convergence -eq 1 ]; then\n')
+                            outfile.write('    break\n')
+                            outfile.write('fi\n')
 
     def write_submitfile(self):
         IO.write_submitfile(self.directory, self.replacements)                        

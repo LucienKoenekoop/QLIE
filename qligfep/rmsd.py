@@ -238,13 +238,12 @@ if __name__ == '__main__':
         print(run.option+' rmsd: '+run.rmsd()[0], '+/-', run.rmsd()[1])
 
     elif run.option == 'residues':
-#        while True:
-#                option = int(input('Side chain CBs (1) or All residue atoms (2)? '))
-#                if option == 1 or option == 2:
-#                    break
-#                else:
-#                    print("That's not a valid option!")
-        option = 1
+        while True:
+                option = int(input('Side chain CBs (1) or All residue atoms (2)? '))
+                if option == 1 or option == 2:
+                    break
+                else:
+                    print("That's not a valid option!")
         run.Residues(option)
         inputs = sorted(glob.glob(run.LIEdir+'/inputfiles/rmsd_'+run.option+'*.inp'))
         for i,infile in enumerate(inputs):

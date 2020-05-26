@@ -56,7 +56,7 @@ for YYY in Ligands:
     # ...select only the ligand (in its correct coordination) and adds Hydrogens.
     cmd.select('resn '+YYY.lig+' and chain A')
     cmd.h_add('sele')
-    cmd.select('resn '+YYY.lig)
+    cmd.select('resn '+YYY.lig+' and chain A')
     
     # ...and finally save as LIG_PROT_MODE.pdb file.
     os.chdir('{}/{}/1.binding/1.ligprep/'.format(path, YYY.prot))

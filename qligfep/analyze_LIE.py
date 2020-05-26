@@ -63,6 +63,16 @@ class Run(object):
 
         self.vdw = [x for x in self.vdw if x != []] # discards empty lists of failed reps
         self.el  = [x for x in self.el if x != []]
+    
+    def Q_test(self, data):
+        Q = {3: 0.941, 4: 0.765, 5: 0.642, 6: 0.560, 7: 0.507, 8: 0.437, 9: 0.437, 10: 0.412}
+        Q1 = abs(data[0]-data[1])/(data[-1]-data[0])
+        Q2 = abs(data[-1]-data[-2])/(data[-1]-data[0])
+        if Q1 > Q[len(data)]:
+            data.pop(0)
+        if Q2 > Q[len(data)]:
+            data.pop(-1)
+        return data
         
     def calc_LIE(self):
         avg_vdw = []
@@ -70,12 +80,30 @@ class Run(object):
         
         for rep in self.vdw:
             avg_vdw.append(np.nanmean(rep)) # list of average vdw per rep
+        
+#        avg_vdw.sort() # Remove outliers
+#        while True:
+#            a = avg_vdw[:]
+#            self.Q_test(avg_vdw)
+#            if a == avg_vdw:
+#                break
+        
         vdw = np.nanmean(avg_vdw) # total average vdw
+#        vdw = np.nanmedian(avg_vdw) # total median vdw
         vdw_sem = np.nanstd(avg_vdw)/np.sqrt(len(avg_vdw))
         
         for rep in self.el:
             avg_el.append(np.nanmean(rep)) # list of average el per rep
+        
+#        avg_el.sort() # Remove outliers
+#        while True:
+#            a = avg_el[:]
+#            self.Q_test(avg_el)
+#            if a == avg_el:
+#                break
+        
         el = np.nanmean(avg_el) # total average el
+#        el = np.nanmedian(avg_el) # total median el
         el_sem = np.nanstd(avg_el)/np.sqrt(len(avg_el)) 
         
         print('vdw:', vdw, '+/-', vdw_sem, '| el:', el, '+/-', el_sem, 'beta', self.beta, ' ')
